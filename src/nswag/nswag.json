@@ -1,0 +1,57 @@
+{
+    "runtime": "Net80",
+    "defaultVariables": null,
+    "documentGenerator": {
+        "fromDocument": {
+            "url": "https://localhost:44311/swagger/v1/swagger.json",
+            "output": null,
+            "newLineBehavior": "Auto"
+        }
+    },
+    "codeGenerators": {
+        "openApiToTypeScriptClient": {
+            "className": "ServiceProxyBase",
+            "moduleName": "",
+            "namespace": "",
+            "typeScriptVersion": 4.3,
+            "template": "Angular",
+            "promiseType": "Promise",
+            "httpClass": "HttpClass",
+            "withOptions": true,
+            "withCredentials": true,
+            "useTransformOptionsMethod": true,
+            "useTransformResultMethod": true,
+            "generateClientClasses": true,
+            "generateClientInterfaces": false,
+            "generateOptionalParameters": true,
+            "exportTypes": true,
+            "wrapDtoExceptions": true,
+            "exceptionClass": "SwaggerException",
+            "clientBaseClass": null,
+            "wrapResponses": false,
+            "wrapResponseMethods": [],
+            "generateResponseClasses": true,
+            "responseClass": "SwaggerResponse",
+            "namespace": "",
+            "typeStyle": "Interface",
+            "nullValue": "Undefined",
+            "generateConstructorInterface": true,
+            "convertConstructorInterfaceData": false,
+            "importRequiredTypes": true,
+            "useGetBaseUrlMethod": true,
+            "baseUrlTokenName": "API_BASE_URL",
+            "queryNullValue": "",
+            "inlineNamedDictionaries": false,
+            "inlineNamedAny": false,
+            "includeHttpContext": true,
+            "templateDirectory": null,
+            "typeNameGeneratorType": "DefaultTypeNameGenerator",
+            "propertyNameGeneratorType": "CamelCasePropertyNameGenerator",
+            "enumNameGeneratorType": "DefaultEnumNameGenerator",
+            "serviceHost": null,
+            "serviceSchemes": null,
+            "output": "src/app/shared/service-proxies/service-proxies.ts",
+            "newLineBehavior": "Auto"
+        }
+    }
+}
