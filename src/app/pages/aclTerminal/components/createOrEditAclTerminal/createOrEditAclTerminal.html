@@ -1,0 +1,29 @@
+<p-dialog [visible]="visible" [style]="{ width: '40rem' }" [modal]="true" [header]="isEditMode() ? 'Edit Terminal' : 'Create Terminal'" (onHide)="hide()">
+  <div class="p-4">
+    <div class="mb-3">
+      <label class="block font-bold mb-1">PC Name</label>
+      <input pInputText [(ngModel)]="editModel().pcName" class="w-full" />
+      <small class="text-red-500" *ngIf="submitted() && !editModel().pcName">PC Name is required</small>
+    </div>
+
+    <div class="mb-3">
+      <label class="block font-bold mb-1">Site Id</label>
+      <input pInputText type="number" [(ngModel)]="editModel().siteId" class="w-full" />
+    </div>
+
+    <div class="mb-3">
+      <label class="block font-bold mb-1">MAC Address</label>
+      <input pInputText [(ngModel)]="editModel().macAddress" class="w-full" />
+    </div>
+
+    <div class="mb-3">
+      <label class="block font-bold mb-1">Status</label>
+      <input pInputText [(ngModel)]="editModel().status" class="w-full" />
+    </div>
+  </div>
+
+  <ng-template #footer>
+    <p-button label="Cancel" icon="pi pi-times" text (click)="hide()" [disabled]="isLoading()"></p-button>
+    <p-button label="Save" icon="pi pi-check" (click)="save()" [loading]="isLoading()" [disabled]="isLoading()"></p-button>
+  </ng-template>
+</p-dialog>

@@ -22,7 +22,8 @@ export class AppMenu {
      private destroy$ = new Subject<void>();
     constructor(private menuService: MenuService) {}
     ngOnInit() {
-        this.menuService.loadDynamicMenuFromAPI()
+        // this.menuService.loadDynamicMenuFromAPI()
+        this.menuService.loadDynamicMenu()
         
         this.menuService.dynamicMenu$
             .pipe(takeUntil(this.destroy$))

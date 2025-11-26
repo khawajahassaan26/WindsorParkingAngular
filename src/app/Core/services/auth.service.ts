@@ -1,22 +1,72 @@
+// src/app/modules/auth/services/auth.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { Observable, BehaviorSubject, throwError, of } from 'rxjs';
+import { tap, catchError, map } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { TokenService } from './token.service';
+import { SessionService } from './session.service';
+import { LoginResponse, UserInfo, LoginInfo, Rights } from '../models/User.modal';
 
-interface LoginResponse { accessToken: string; refreshToken: string; role: string;userId: number }
-interface RefreshResponse { accessToken: string; refreshToken: string; role: string; userId: number}
+interface LoginDto {
+  username: string;
+  password: string;
+}
+
+interface RefreshResponse {
+  token: string;
+  user: UserInfo;
+  userRights?: Rights[];
+  loginDetail?: LoginInfo;
+}
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private apiUrl = 'https://localhost:44316/api/auth';  // Update to your API URL
-  private tokenSubject = new BehaviorSubject<string | null>(localStorage.getItem('accessToken'));
+  private apiUrl = 'https://localhost:44318/api/auth';
+  private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
+  public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private tokenService: TokenService,
+    private sessionService: SessionService
+  ) {
+    // Initialize authentication state on service creation
+    this.initializeAuthState();
+  }
 
-  login(username: string, password: string): Observable<LoginResponse> {
+  private initializeAuthState(): void {
+    const isAuth = this.sessionService.isAuthenticated();
+    this.isAuthenticatedSubject.next(isAuth);
+  }
+
+  login(username: string, password: string, remember: boolean = false): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.apiUrl}/login`, { username, password }).pipe(
-      tap(res => this.setTokens(res.accessToken, res.refreshToken,res.role, res.userId))
+      tap(response => {
+        console.log('Login response:', response); // Debug log
+        
+        // Store tokens and user data using TokenService
+        this.tokenService.storeToken(remember, response);
+        
+        // Update session with user info - ALWAYS update, even with partial data
+        this.sessionService.updateSession(
+          response.user || {} as UserInfo,
+          response.userRights || [],
+          response.loginDetail || {} as LoginInfo
+        );
+        
+        // Verify storage
+        console.log('After login - Token:', this.tokenService.getToken());
+        console.log('After login - User:', this.sessionService.getUser());
+        console.log('After login - isAuthenticated:', this.sessionService.isAuthenticated());
+        
+        this.isAuthenticatedSubject.next(true);
+      }),
+      catchError(error => {
+        console.error('Login failed:', error);
+        return throwError(() => error);
+      })
     );
   }
 
@@ -24,31 +74,89 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/register`, { username, password });
   }
 
-  refreshToken(): Observable<RefreshResponse> {
-    const refreshToken = localStorage.getItem('refreshToken');
-    return this.http.post<RefreshResponse>(`${this.apiUrl}/refresh`, { refreshToken }).pipe(
-      tap(res => this.setTokens(res.accessToken, res.refreshToken,res.role, res.userId))
+  refreshToken(): Observable<boolean> {
+    const token = this.tokenService.getToken();
+    
+    // If no token exists or token is not expired, skip refresh
+    if (!token) {
+      return of(false);
+    }
+
+    if (!this.tokenService.isTokenExpired()) {
+      // Token is still valid, no need to refresh
+      this.isAuthenticatedSubject.next(true);
+      return of(true);
+    }
+
+    // Token exists but is expired, attempt refresh
+    return this.http.post<RefreshResponse>(`${this.apiUrl}/refresh`, { 
+      refreshToken: token 
+    }).pipe(
+      map(response => {
+        // Determine storage type based on where current token is stored
+        const remember = !!localStorage.getItem(this.tokenService['tokenKey']);
+        
+        // Store new tokens
+        this.tokenService.storeToken(remember, {
+          token: response.token,
+          user: response.user,
+          userRights: response.userRights,
+          loginDetail: response.loginDetail
+        } as LoginResponse);
+        
+        // Update session
+        if (response.user && response.loginDetail) {
+          this.sessionService.updateSession(
+            response.user,
+            response.userRights || [],
+            response.loginDetail
+          );
+        }
+        
+        this.isAuthenticatedSubject.next(true);
+        return true;
+      }),
+      catchError(error => {
+        console.error('Token refresh failed:', error);
+        this.logout();
+        return of(false);
+      })
     );
   }
 
-  logout() {
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-    localStorage.removeItem('role');
-    localStorage.removeItem('userId');
-    this.tokenSubject.next(null);
-    this.router.navigate(['']);
+  logout(): void {
+    const refreshToken = this.tokenService.getToken();
+    
+    // Call backend logout if token exists
+    if (refreshToken) {
+      this.http.post(`${this.apiUrl}/logout`, { refreshToken }).subscribe({
+        error: (err) => console.error('Logout API call failed:', err)
+      });
+    }
+    
+    // Clear all stored data
+    this.tokenService.clear();
+    this.sessionService.clearSession();
+    this.isAuthenticatedSubject.next(false);
+    
+    // Navigate to login
+    this.router.navigate(['/auth/login']);
   }
 
   isLoggedIn(): boolean {
-    return !!this.tokenSubject.value;
+    return this.sessionService.isAuthenticated();
   }
 
-  private setTokens(accessToken: string, refreshToken: string, role? :string , userId? :number) {
-    localStorage.setItem('accessToken', accessToken);
-    localStorage.setItem('refreshToken', refreshToken);
-    localStorage.setItem('role', role ?? "");
-    localStorage.setItem('userId', userId?.toString() ?? (0).toString());
-    this.tokenSubject.next(accessToken);
+  getCurrentUser(): UserInfo | null {
+    return this.sessionService.getUser();
+  }
+
+  getLoginInfo(): LoginInfo | null {
+    return this.sessionService.getLoginInfo();
+  }
+
+  // Helper method to check if token needs refresh
+  needsTokenRefresh(): boolean {
+    return this.tokenService.isTokenExpired();
   }
 }

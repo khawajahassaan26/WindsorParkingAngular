@@ -1,0 +1,29 @@
+<p-dialog [visible]="visible" [style]="{ width: '45rem' }" [modal]="true" [header]="isEdit() ? 'Edit Service' : 'Create Service'" (onHide)="close()">
+  <div class="p-4">
+    <div class="mb-3">
+      <label class="block font-bold mb-1">Service Name</label>
+      <input pInputText [(ngModel)]="model().serviceName" class="w-full" />
+      <small class="text-red-500" *ngIf="submitted() && !model().serviceName">Service Name is required</small>
+    </div>
+
+    <div class="mb-3">
+      <label class="block font-bold mb-1">Description</label>
+      <input pInputText [(ngModel)]="model().description" class="w-full" />
+    </div>
+
+    <div class="mb-3">
+      <label class="block font-bold mb-1">Type</label>
+      <input pInputText [(ngModel)]="model().type" class="w-full" />
+    </div>
+
+    <div class="mb-3">
+      <label class="block font-bold mb-1">Status</label>
+      <input pInputText [(ngModel)]="model().status" class="w-full" />
+    </div>
+  </div>
+
+  <ng-template #footer>
+    <p-button label="Cancel" icon="pi pi-times" text (click)="close()" [disabled]="isLoading()"></p-button>
+    <p-button label="Save" icon="pi pi-check" (click)="save()" [loading]="isLoading()" [disabled]="isLoading()"></p-button>
+  </ng-template>
+</p-dialog>

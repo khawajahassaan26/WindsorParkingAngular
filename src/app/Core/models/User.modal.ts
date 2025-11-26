@@ -51,3 +51,42 @@ export interface RefreshTokenResponse {
   token: string;
   expiresIn: number;
 }
+export class UserInfo {
+    userId?: number;
+    userName?: string | undefined;
+    sdpId?: number;
+    empId?: number;
+    groupId?: number;
+}
+export class Rights  {
+    objectId?: number;
+    objectName?: string | undefined;
+    canView?: string | undefined;
+    canAdd?: string | undefined;
+    canEdit?: string | undefined;
+    canDelete?: string | undefined;
+}
+export class LoginInfo {
+    companyId?: number | undefined;
+    companyName?: string | undefined;
+    sdpName?: string | undefined;
+    sdpId?: number | undefined;
+    posRegId?: number | undefined;
+    yearId?: number;
+    fyName?: string | undefined;
+}
+
+export class LoginResponse {
+    success?: boolean;
+    message?: string | undefined;
+    token?: string | undefined;
+    user?: UserInfo;
+    isPasswordExpired?: boolean;
+    userRights?: Rights[] | undefined;
+    accessToken?: string | undefined;
+    encryptedAccessToken?: string | undefined;
+    expireInSeconds?: number;
+    userId?: number;
+    userName?: string | undefined;
+    loginDetail?: LoginInfo;
+}

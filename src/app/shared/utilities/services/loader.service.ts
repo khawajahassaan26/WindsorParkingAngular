@@ -11,6 +11,10 @@ export interface LoaderState {
   providedIn: 'root'
 })
 export class LoaderService {
+  setError() {
+    throw new Error('Method not implemented.');
+  }
+ 
   private loaderSubject = new BehaviorSubject<LoaderState>({ show: false });
   public loader$: Observable<LoaderState> = this.loaderSubject.asObservable();
 

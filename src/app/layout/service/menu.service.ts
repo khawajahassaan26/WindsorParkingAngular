@@ -24,7 +24,7 @@ export interface NewMenuItem extends MenuItem
 export class MenuService {
   private dynamicMenuSubject = new BehaviorSubject<NewMenuItem[]>([]);
   public dynamicMenu$ = this.dynamicMenuSubject.asObservable();
-  private apiUrl = 'https://localhost:44316/';  // Update to your API URL
+  private apiUrl = 'https://localhost:44318/';  // Update to your API URL
 
   // Mock user permissions - replace with real auth service
   private currentUserPermissions: UserPermissions = {
