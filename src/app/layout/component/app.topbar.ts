@@ -16,7 +16,7 @@ import {AppUserMenu }  from './user.menu';
                 <i class="pi pi-bars"></i>
             </button>
             <a class="layout-topbar-logo" routerLink="/">
-                <img src="assets/layout/images/Logo.png" alt="Windsor Logo" class="layout-topbar-logo-image" />
+                <img src="assets/layout/images/logo/Logo.png" alt="Windsor Logo" class="layout-topbar-logo-image "  style="width:30% !important"/>
                 <!-- <svg viewBox="0 0 54 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
                         fill-rule="evenodd"
@@ -34,7 +34,7 @@ import {AppUserMenu }  from './user.menu';
                         />
                     </g>
                 </svg> -->
-                <span>Windsor</span>
+                <!-- <span>Windsor</span> -->
             </a>
         </div>
 

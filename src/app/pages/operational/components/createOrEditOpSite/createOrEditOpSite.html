@@ -1,0 +1,62 @@
+<p-dialog [visible]="visible" [style]="{ width: '50rem' }" [modal]="true" [header]="isEdit() ? 'Edit Site' : 'Create Site'" (onHide)="close()">
+  <div class="p-4">
+    <div class="mb-3">
+      <label class="block font-bold mb-1">Site Name *</label>
+      <input pInputText [(ngModel)]="model().siteName" class="w-full" />
+      <small class="text-red-500" *ngIf="submitted() && !model().siteName">Site Name is required</small>
+    </div>
+
+    <div class="mb-3">
+      <label class="block font-bold mb-1">Site Address</label>
+      <input pInputText [(ngModel)]="model().siteAddress" class="w-full" />
+    </div>
+
+    <div class="grid grid-cols-2 gap-3 mb-3">
+      <div>
+        <label class="block font-bold mb-1">City</label>
+        <input pInputText [(ngModel)]="model().city" class="w-full" />
+      </div>
+      <div>
+        <label class="block font-bold mb-1">Province</label>
+        <input pInputText [(ngModel)]="model().province" class="w-full" />
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-3 mb-3">
+      <div>
+        <label class="block font-bold mb-1">Country</label>
+        <input pInputText [(ngModel)]="model().country" class="w-full" />
+      </div>
+      <div>
+        <label class="block font-bold mb-1">Parking Capacity</label>
+        <input pInputText type="number" [(ngModel)]="model().siteParkingCapacity" class="w-full" />
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-3 mb-3">
+      <div>
+        <label class="block font-bold mb-1">Latitude</label>
+        <input pInputText type="number" [(ngModel)]="model().siteLattitude" class="w-full" />
+      </div>
+      <div>
+        <label class="block font-bold mb-1">Longitude</label>
+        <input pInputText type="number" [(ngModel)]="model().siteLongitude" class="w-full" />
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label class="block font-bold mb-1">Logo</label>
+      <input pInputText [(ngModel)]="model().siteLogo" class="w-full" />
+    </div>
+
+    <div class="mb-3">
+      <label class="block font-bold mb-1">Status</label>
+      <input pInputText [(ngModel)]="model().status" class="w-full" />
+    </div>
+  </div>
+
+  <ng-template #footer>
+    <p-button label="Cancel" icon="pi pi-times" text (click)="close()" [disabled]="isLoading()"></p-button>
+    <p-button label="Save" icon="pi pi-check" (click)="save()" [loading]="isLoading()" [disabled]="isLoading()"></p-button>
+  </ng-template>
+</p-dialog>

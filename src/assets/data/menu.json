@@ -27,6 +27,32 @@
                         }
                     ]
                 },
+
+                 {
+                    "label": "Operations Management",
+                    "items": [
+                        {
+                            "label": "Terminal",
+                            "icon": "pi pi-fw pi-desktop",
+                            "routerLink": ["/pages/aclTerminal"]
+                        },
+                        {
+                            "label": "Service",
+                            "icon": "pi pi-fw pi-list",
+                            "routerLink": ["/pages/operational/opService"]
+                        },
+                        {
+                            "label": "Site",
+                            "icon": "pi pi-fw pi-map",
+                            "routerLink": ["/pages/operational/opSite"]
+                        },
+                        {
+                            "label": "Vehicle Type",
+                            "icon": "pi pi-fw pi-car",
+                            "routerLink": ["/pages/operational/opVehicleType"]
+                        }
+                    ]
+                },
             {
                 "label": "Landing",
                 "icon": "pi pi-fw pi-globe",
