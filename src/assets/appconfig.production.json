@@ -1,5 +1,5 @@
 {
-  "API_BASE_URL": "https://localhost:44318",
+  "API_BASE_URL": "https://202.142.177.156/msps",
   "appVersion": "v8.2.4",
   "USERDATA_KEY": "authf649fc9a5f55",
   "isMockEnabled": false,

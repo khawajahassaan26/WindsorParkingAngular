@@ -96,7 +96,7 @@ LoaderService (root)
     ├── showLoading()
     └── showProcessing()
 
-AclAdminUserServiceProxy
+ACLAdminUserDTOesServiceProxy
 ├── createAclAdminUser(dto)
 ├── updateAclAdminUser(id, dto)
 ├── getAllAclAdminUsers()
@@ -119,7 +119,7 @@ LoadingInterceptor
 
 ### CreateOrEditAclAdminUser Component
 
-**Location:** `src/app/pages/aclAdminUser/components/createOrEditAclAdminUser/`
+**Location:** `src/app/features/aclAdminUser/components/createOrEditAclAdminUser/`
 
 **Files:**
 - `createOrEditAclAdminUser.ts` - Component logic (180 lines)

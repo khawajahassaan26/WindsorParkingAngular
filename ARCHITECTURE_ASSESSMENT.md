@@ -52,11 +52,11 @@
 // You're already doing this ✅
 {
   path: 'uikit',
-  loadChildren: () => import('./app/pages/uikit/uikit.routes')
+  loadChildren: () => import('./app/features/uikit/uikit.routes')
 },
 {
-  path: 'pages',
-  loadChildren: () => import('./app/pages/pages.routes')
+  path: 'features',
+  loadChildren: () => import('./app/features/features.routes')
 }
 ```
 
@@ -78,7 +78,7 @@ However, a Mini ERP is different from a typical web app. You need:
 ### Problems with Pure Standalone + Flat Structure
 
 ❌ **No clear feature boundaries**
-- All components in `/pages` directory
+- All components in `/features` directory
 - Shared services everywhere
 - Hard to understand what belongs where
 
@@ -225,7 +225,7 @@ features/
 
 **Step 2: Move Components**
 ```typescript
-// OLD: src/app/pages/aclAdminUser/...
+// OLD: src/app/features/aclAdminUser/...
 // NEW: src/app/features/admin-users/...
 ```
 

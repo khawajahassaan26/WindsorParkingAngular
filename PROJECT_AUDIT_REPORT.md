@@ -157,7 +157,7 @@ canActivate(...) {
 ### 4. **❌ CRITICAL: Login Form Issues**
 
 **Status:** ⚠️ PARTIALLY BROKEN  
-**Location:** `src/app/pages/auth/login.ts`
+**Location:** `src/app/features/auth/login.ts`
 
 **Problems:**
 ```typescript
@@ -263,7 +263,7 @@ deleteUser(user: AclAdminUser) {
 
 ---
 
-### 8. **No Delete API in AclAdminUserServiceProxy**
+### 8. **No Delete API in ACLAdminUserDTOesServiceProxy**
 
 **Status:** ⚠️ MISSING METHOD  
 **Location:** `src/app/shared/service-proxies/service-proxies.ts`

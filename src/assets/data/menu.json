@@ -13,9 +13,9 @@
     },
    
     {
-        "label": "Pages",
+        "label": "features",
         "icon": "pi pi-fw pi-briefcase",
-        "routerLink": ["/pages"],
+        "routerLink": ["/features"],
         "items": [
             {
                     "label": "User Management",
@@ -23,7 +23,7 @@
                         {
                             "label": "User",
                             "icon": "pi pi-fw pi-user",
-                            "routerLink": ["/pages/aclAdminUser"]
+                            "routerLink": ["/features/aclAdminUser"]
                         }
                     ]
                 },
@@ -34,22 +34,22 @@
                         {
                             "label": "Terminal",
                             "icon": "pi pi-fw pi-desktop",
-                            "routerLink": ["/pages/aclTerminal"]
+                            "routerLink": ["/features/aclTerminal"]
                         },
                         {
                             "label": "Service",
                             "icon": "pi pi-fw pi-list",
-                            "routerLink": ["/pages/operational/opService"]
+                            "routerLink": ["/features/operational/opService"]
                         },
                         {
                             "label": "Site",
                             "icon": "pi pi-fw pi-map",
-                            "routerLink": ["/pages/operational/opSite"]
+                            "routerLink": ["/features/operational/opSite"]
                         },
                         {
                             "label": "Vehicle Type",
                             "icon": "pi pi-fw pi-car",
-                            "routerLink": ["/pages/operational/opVehicleType"]
+                            "routerLink": ["/features/operational/opVehicleType"]
                         }
                     ]
                 },
@@ -82,17 +82,17 @@
             {
                 "label": "Crud",
                 "icon": "pi pi-fw pi-pencil",
-                "routerLink": ["/pages/crud"]
+                "routerLink": ["/features/crud"]
             },
             {
                 "label": "Not Found",
                 "icon": "pi pi-fw pi-exclamation-circle",
-                "routerLink": ["/pages/notfound"]
+                "routerLink": ["/features/notfound"]
             },
             {
                 "label": "Empty",
                 "icon": "pi pi-fw pi-circle-off",
-                "routerLink": ["/pages/empty"]
+                "routerLink": ["/features/empty"]
             }
         ]
     },

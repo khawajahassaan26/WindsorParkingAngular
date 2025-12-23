@@ -87,7 +87,7 @@ provideHttpClient(
 ---
 
 ### Fix #3: Login Form Loader Timing (10 minutes)
-**File:** `src/app/pages/auth/login.ts`
+**File:** `src/app/features/auth/login.ts`
 
 **Current (Broken):**
 ```typescript
@@ -209,14 +209,14 @@ import { ErrorInterceptor } from '@/Core/interceptors/error.interceptor';
 
 **File:** `src/app/shared/service-proxies/service-proxies.ts`
 
-**Add method (find AclAdminUserServiceProxy class and add):**
+**Add method (find ACLAdminUserDTOesServiceProxy class and add):**
 ```typescript
 deleteAclAdminUser(id: number): Observable<void> {
   return this.http.delete<void>(`${this.apiUrl}/aclAdminUsers/${id}`);
 }
 ```
 
-**File:** `src/app/pages/aclAdminUser/components/aclAdminUserListing/aclAdminUserListing.ts`
+**File:** `src/app/features/aclAdminUser/components/aclAdminUserListing/aclAdminUserListing.ts`
 
 **Update deleteUser method:**
 ```typescript
@@ -260,7 +260,7 @@ deleteUser(user: AclAdminUser) {
 ## HIGH PRIORITY: Phase 2 - High-Impact Fixes (1.5 hours)
 
 ### Fix #6: Page Title (5 minutes)
-**File:** `src/app/pages/aclAdminUser/components/aclAdminUserListing/aclAdminUserListing.html`
+**File:** `src/app/features/aclAdminUser/components/aclAdminUserListing/aclAdminUserListing.html`
 
 Change:
 ```html
@@ -275,7 +275,7 @@ To:
 ---
 
 ### Fix #7: Add Loading to List Fetch (10 minutes)
-**File:** `src/app/pages/aclAdminUser/components/aclAdminUserListing/aclAdminUserListing.ts`
+**File:** `src/app/features/aclAdminUser/components/aclAdminUserListing/aclAdminUserListing.ts`
 
 Update loadUsers method:
 ```typescript
@@ -303,7 +303,7 @@ loadUsers() {
 
 ### Fix #8: Fix userType Field Naming (15 minutes)
 
-**File:** `src/app/pages/aclAdminUser/components/aclAdminUserListing/aclAdminUserListing.html`
+**File:** `src/app/features/aclAdminUser/components/aclAdminUserListing/aclAdminUserListing.html`
 
 Ensure consistency - use `userType` everywhere (not `usertype`):
 ```html
@@ -314,7 +314,7 @@ Ensure consistency - use `userType` everywhere (not `usertype`):
 [globalFilterFields]="['username', 'email', 'mobile', 'status', 'userType']"
 ```
 
-**File:** `src/app/pages/aclAdminUser/components/createOrEditAclAdminUser/createOrEditAclAdminUser.ts`
+**File:** `src/app/features/aclAdminUser/components/createOrEditAclAdminUser/createOrEditAclAdminUser.ts`
 
 Fix the DTO creation:
 ```typescript
@@ -331,7 +331,7 @@ userType: this.createOrEditUser().userType
 ---
 
 ### Fix #9: Form Dirty State Warning (20 minutes)
-**File:** `src/app/pages/aclAdminUser/components/createOrEditAclAdminUser/createOrEditAclAdminUser.ts`
+**File:** `src/app/features/aclAdminUser/components/createOrEditAclAdminUser/createOrEditAclAdminUser.ts`
 
 Add to component:
 ```typescript

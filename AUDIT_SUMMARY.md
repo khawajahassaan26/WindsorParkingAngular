@@ -194,7 +194,7 @@ All answers are in the documentation files I created. Each issue has:
 - Code examples
 - Where to make changes
 
-**Total Documentation:** ~50 pages of guides
+**Total Documentation:** ~50 features of guides
 
 ---
 

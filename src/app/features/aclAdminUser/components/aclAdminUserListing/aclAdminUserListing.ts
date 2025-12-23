@@ -1,16 +1,16 @@
-import { AclAdminUser, AclAdminUserServiceProxy } from '@/shared/service-proxies/service-proxies';
+import { AclAdminUser, ACLAdminUserDTOesServiceProxy } from '@/shared/service-proxies/service-proxies';
 import { ChangeDetectionStrategy, Component, signal, ViewChild } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { CreateOrEditAclAdminUser } from '../createOrEditAclAdminUser/createOrEditAclAdminUser';
-import { CommonPrimeNgImports } from '@/pages/shared/commonPrimeNgModule';
+import { CommonPrimeNgImports } from '@/features/sharedPrimeNgModule/commonPrimeNgModule';
 
 
 @Component({
   selector: 'app-acl-admin-user-listing',
   standalone: true,
   imports: [CommonPrimeNgImports,CreateOrEditAclAdminUser],
-  providers: [MessageService, ConfirmationService, AclAdminUserServiceProxy],
+  providers: [MessageService, ConfirmationService, ACLAdminUserDTOesServiceProxy],
   templateUrl: './aclAdminUserListing.html',
   styleUrl: './aclAdminUserListing.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -28,7 +28,7 @@ export class AclAdminUserListing {
   @ViewChild('dt') dt!: Table;
 
   constructor(
-    private aclAdminUserService: AclAdminUserServiceProxy,
+    private aclAdminUserService: ACLAdminUserDTOesServiceProxy,
     private messageService: MessageService,
     private confirmationService: ConfirmationService
   ) { }
@@ -38,7 +38,7 @@ export class AclAdminUserListing {
     }
 
     loadUsers() {
-        this.aclAdminUserService.getAllAclAdminUsers().subscribe({
+        this.aclAdminUserService.aCLAdminUserDTOesAll().subscribe({
             next: (data) => {
                 this.users.set(data);
             },
@@ -54,7 +54,7 @@ export class AclAdminUserListing {
     }
 
    editUser(user: AclAdminUser) {
-  this.aclAdminUserService.getAclAdminUserById(user.autoid!).subscribe({
+  this.aclAdminUserService.aCLAdminUserDTOesGET(user.autoid!).subscribe({
     next: (fetchedUser) => {
       this.selectedUser.set(Object.assign(new AclAdminUser(), fetchedUser));
       this.dialogVisible.set(true);

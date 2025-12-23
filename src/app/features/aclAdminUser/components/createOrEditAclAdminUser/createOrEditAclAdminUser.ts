@@ -1,4 +1,4 @@
-import { AclAdminUser, AclAdminUserServiceProxy } from '@/shared/service-proxies/service-proxies';
+import { AclAdminUser, ACLAdminUserDTOesServiceProxy } from '@/shared/service-proxies/service-proxies';
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, signal } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -33,7 +33,7 @@ export class CreateOrEditAclAdminUser {
   createOrEditUser = signal<AclAdminUser>(new AclAdminUser());
 
   constructor(
-    private aclAdminUserService: AclAdminUserServiceProxy,
+    private aclAdminUserService: ACLAdminUserDTOesServiceProxy,
     private messageService: MessageService,
     private loaderService: LoaderService
   ) {}
@@ -128,7 +128,7 @@ export class CreateOrEditAclAdminUser {
       status: 'Active'
     });
 
-    this.aclAdminUserService.createAclAdminUser(createDto).subscribe({
+    this.aclAdminUserService.aCLAdminUserDTOesPOST(createDto).subscribe({
       next: (result) => {
         this.messageService.add({
           severity: 'success',
@@ -166,7 +166,7 @@ export class CreateOrEditAclAdminUser {
       status: this.createOrEditUser().status
     });
 
-    this.aclAdminUserService.updateAclAdminUser(userId!, updateDto).subscribe({
+    this.aclAdminUserService.aCLAdminUserDTOesPUT(userId!, updateDto).subscribe({
       next: (result) => {
         this.messageService.add({
           severity: 'success',
