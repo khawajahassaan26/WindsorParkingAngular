@@ -1,18 +1,19 @@
-import { AclAdminUser, ACLAdminUserDTOesServiceProxy } from '@/shared/service-proxies/service-proxies';
+import { AclAdminUser, ACLAdminUserDTOesServiceProxy, OPSiteDTOesServiceProxy, OpSite } from '@/shared/service-proxies/service-proxies';
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, signal, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
+import { MultiSelectModule } from 'primeng/multiselect';
 import { LoaderService } from '@/shared/utilities/services/loader.service';
 
 @Component({
   selector: 'app-create-or-edit-acl-admin-user',
   standalone: true,
-  imports: [CommonModule, DialogModule, ButtonModule, FormsModule, ReactiveFormsModule, InputTextModule],
-  providers: [MessageService],
+  imports: [CommonModule, DialogModule, ButtonModule, FormsModule, ReactiveFormsModule, InputTextModule, MultiSelectModule],
+  providers: [MessageService, OPSiteDTOesServiceProxy],
   templateUrl: './createOrEditAclAdminUser.html',
   styleUrl: './createOrEditAclAdminUser.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -32,11 +33,28 @@ export class CreateOrEditAclAdminUser {
 
   createOrEditUser = signal<AclAdminUser>(new AclAdminUser());
 
+  // site options for multiselect
+  sites = signal<OpSite[]>([]);
+  // selected site ids for MultiSelect
+  selectedSiteIds = signal<number[]>([]);
+
   constructor(
     private aclAdminUserService: ACLAdminUserDTOesServiceProxy,
+    private opSiteService: OPSiteDTOesServiceProxy,
     private messageService: MessageService,
     private loaderService: LoaderService
   ) {}
+
+  ngOnInit(): void {
+    this.loadSites();
+  }
+
+  private loadSites() {
+    this.opSiteService.oPSiteDTOesAll().subscribe({
+      next: (data: OpSite[]) => this.sites.set(data),
+      error: () => this.sites.set([])
+    });
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['user'] && this.user) {
@@ -44,6 +62,9 @@ export class CreateOrEditAclAdminUser {
       const userData = this.user;
       this.isEditMode.set(!!userData?.autoid && userData.autoid > 0);
       this.createOrEditUser.set(Object.assign(new AclAdminUser(), userData));
+      // populate selectedSiteIds from user's opSites
+      const ids = (userData.opSites || []).map(s => s.autoid!).filter(id => id != null) as number[];
+      this.selectedSiteIds.set(ids);
       this.submitted.set(false);
       this.confirmPassword.set('');
       this.passwordMismatch.set(false);
@@ -127,6 +148,11 @@ export class CreateOrEditAclAdminUser {
       password: this.createOrEditUser().password,
       status: 'Active'
     });
+    // include role/profileImage/opSites if present
+    createDto.role = this.createOrEditUser().role;
+    createDto.profileImage = this.createOrEditUser().profileImage;
+    // map selected site ids to minimal opSite objects for backend
+    createDto.opSites = this.selectedSiteIds().map(id => ({ autoid: id } as any));
 
     this.aclAdminUserService.aCLAdminUserDTOesPOST(createDto).subscribe({
       next: (result) => {
@@ -165,7 +191,11 @@ export class CreateOrEditAclAdminUser {
       usertype: this.createOrEditUser().usertype,
       status: this.createOrEditUser().status
     });
-
+    updateDto.role = this.createOrEditUser().role;
+    updateDto.profileImage = this.createOrEditUser().profileImage;
+    updateDto.opSites = this.sites().filter(site =>
+                this.selectedSiteIds().some(s => s === site.autoid)
+            );
     this.aclAdminUserService.aCLAdminUserDTOesPUT(userId!, updateDto).subscribe({
       next: (result) => {
         this.messageService.add({

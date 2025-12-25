@@ -21,7 +21,8 @@ import { LoaderService } from '@/shared/utilities/services/loader.service';
                 <div style="border-radius: 56px; padding: 0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%)">
                     <div class="w-full bg-surface-0 dark:bg-surface-900 py-20 px-8 sm:px-20" style="border-radius: 53px">
                         <div class="text-center mb-8">
-                            <svg viewBox="0 0 54 40" fill="none" xmlns="http://www.w3.org/2000/svg" class="mb-8 w-16 shrink-0 mx-auto">
+                            <img src="assets/layout/images/logo/Logo.png" alt="Image" class="mb-6 w-30 mx-auto" />
+                            <!-- <svg viewBox="0 0 54 40" fill="none" xmlns="http://www.w3.org/2000/svg" class="mb-8 w-16 shrink-0 mx-auto">
                                 <path
                                     fill-rule="evenodd"
                                     clip-rule="evenodd"
@@ -37,8 +38,8 @@ import { LoaderService } from '@/shared/utilities/services/loader.service';
                                     fill="var(--primary-color)"
                                     />
                                 </g>
-                            </svg>
-                            <div class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4">Welcome to PrimeLand!</div>
+                            </svg> -->
+                            <div class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4">Welcome to Your Portal!</div>
                             <span class="text-muted-color font-medium">Sign in to continue</span>
                         </div>
                         
@@ -100,12 +101,13 @@ export class Login {
 
   onSubmit() {
       if (this.loginForm.valid) {
-      this.loaderService.showLogin('Authenticating...');
-    const { username, password } = this.loginForm.value;
-    this.authService.login(username, password).subscribe({
-      next: () => this.router.navigate(['/dashboard']),  // 👈 Redirect to dashboard
-      error: (err) => this.errorMessage = err.error?.message || 'Login failed'
-    });
+        this.router.navigate(['/dashboard']);
+    //   this.loaderService.showLogin('Authenticating...');
+    // const { username, password } = this.loginForm.value;
+    // this.authService.login(username, password).subscribe({
+    //   next: () => this.router.navigate(['/dashboard']),  // 👈 Redirect to dashboard
+    //   error: (err) => this.errorMessage = err.error?.message || 'Login failed'
+    // });
  this.loaderService.hide();
   }
 }

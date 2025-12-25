@@ -3,47 +3,79 @@ import { ChangeDetectionStrategy, Component, signal, ViewChild } from '@angular/
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { CreateOrEditAclAdminUser } from '../createOrEditAclAdminUser/createOrEditAclAdminUser';
-import { CommonPrimeNgImports } from '@/features/sharedPrimeNgModule/commonPrimeNgModule';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { TableModule } from 'primeng/table';
+import { ButtonModule } from 'primeng/button';
+import { TagModule } from 'primeng/tag';
+import { DialogModule } from 'primeng/dialog';
+import { SkeletonModule } from 'primeng/skeleton';
+import { ToolbarModule } from 'primeng/toolbar';
+import { InputTextModule } from 'primeng/inputtext';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
 
 
 @Component({
-  selector: 'app-acl-admin-user-listing',
-  standalone: true,
-  imports: [CommonPrimeNgImports,CreateOrEditAclAdminUser],
-  providers: [MessageService, ConfirmationService, ACLAdminUserDTOesServiceProxy],
-  templateUrl: './aclAdminUserListing.html',
-  styleUrl: './aclAdminUserListing.css',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-acl-admin-user-listing',
+    standalone: true,
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        TableModule,
+        ButtonModule,
+        TagModule,
+        DialogModule,
+        SkeletonModule,
+        ToolbarModule,
+        InputTextModule,
+        IconFieldModule,
+        InputIconModule,
+        CreateOrEditAclAdminUser
+    ],
+    providers: [MessageService, ConfirmationService, ACLAdminUserDTOesServiceProxy],
+    templateUrl: './aclAdminUserListing.html',
+    styleUrl: './aclAdminUserListing.css',
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AclAdminUserListing {
 
-  dialogVisible = signal<boolean>(false);
+    dialogVisible = signal<boolean>(false);
 
-  users = signal<AclAdminUser[]>([]);
+    users = signal<AclAdminUser[]>([]);
 
-  selectedUser = signal<AclAdminUser | null>(null);
+    loading = signal<boolean>(true);
 
-  selectedUsers!: AclAdminUser[] | null;
+    selectedUser = signal<AclAdminUser | null>(null);
 
-  @ViewChild('dt') dt!: Table;
+    selectedUsers!: AclAdminUser[] | null;
 
-  constructor(
-    private aclAdminUserService: ACLAdminUserDTOesServiceProxy,
-    private messageService: MessageService,
-    private confirmationService: ConfirmationService
-  ) { }
+    // Track expanded rows for the PrimeNG expandable table
+    expandedRows = signal<Record<string, boolean>>({});
 
-   ngOnInit(): void {
+    @ViewChild('dt') dt!: Table;
+
+    constructor(
+        private aclAdminUserService: ACLAdminUserDTOesServiceProxy,
+        private messageService: MessageService,
+        private confirmationService: ConfirmationService
+    ) { }
+
+    ngOnInit(): void {
         this.loadUsers();
     }
 
     loadUsers() {
+        this.loading.set(true);
         this.aclAdminUserService.aCLAdminUserDTOesAll().subscribe({
             next: (data) => {
                 this.users.set(data);
+                this.loading.set(false);
             },
             error: (err) => {
                 console.error(err);
+                this.loading.set(false);
             }
         });
     }
@@ -53,21 +85,21 @@ export class AclAdminUserListing {
         this.dialogVisible.set(true);
     }
 
-   editUser(user: AclAdminUser) {
-  this.aclAdminUserService.aCLAdminUserDTOesGET(user.autoid!).subscribe({
-    next: (fetchedUser) => {
-      this.selectedUser.set(Object.assign(new AclAdminUser(), fetchedUser));
-      this.dialogVisible.set(true);
-    },
-    error: (err) => {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'Failed to load user details'
-      });
+    editUser(user: AclAdminUser) {
+        this.aclAdminUserService.aCLAdminUserDTOesGET(user.autoid!).subscribe({
+            next: (fetchedUser) => {
+                this.selectedUser.set(Object.assign(new AclAdminUser(), fetchedUser));
+                this.dialogVisible.set(true);
+            },
+            error: (err) => {
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Error',
+                    detail: 'Failed to load user details'
+                });
+            }
+        });
     }
-  });
-}
 
     deleteUser(user: AclAdminUser) {
         this.confirmationService.confirm({
@@ -127,11 +159,46 @@ export class AclAdminUserListing {
     }
 
     onUserSaved(user: AclAdminUser) {
+        this.onDialogClosed();
         this.loadUsers();
     }
 
     onDialogClosed() {
         this.dialogVisible.set(false);
+    }
+
+    onRowExpand(event: any) {
+        const key = event.data?.autoid?.toString();
+        if (!key) return;
+        const map = { ...this.expandedRows() };
+        map[key] = true;
+        this.expandedRows.set(map);
+    }
+
+    onRowCollapse(event: any) {
+        const key = event.data?.autoid?.toString();
+        if (!key) return;
+        const map = { ...this.expandedRows() };
+        delete map[key];
+        this.expandedRows.set(map);
+    }
+
+    toggleRow(user: AclAdminUser) {
+        const key = user?.autoid?.toString();
+        if (!key) return;
+        const map = { ...this.expandedRows() };
+        if (map[key]) {
+            delete map[key];
+        } else {
+            map[key] = true;
+        }
+        this.expandedRows.set(map);
+    }
+
+    isRowExpanded(user: AclAdminUser) {
+        const key = user?.autoid?.toString();
+        if (!key) return false;
+        return !!this.expandedRows()[key];
     }
 }
 

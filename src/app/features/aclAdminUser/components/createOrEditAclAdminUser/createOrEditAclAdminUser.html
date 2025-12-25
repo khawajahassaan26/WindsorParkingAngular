@@ -16,7 +16,6 @@
         pInputText 
         id="username" 
         [(ngModel)]="createOrEditUser().username"
-        [readonly]="isEditMode()"
         class="w-full"
         required />
       <small class="text-red-500" *ngIf="submitted() && !createOrEditUser().username">
@@ -40,7 +39,7 @@
     </div>
 
     <!-- Mobile -->
-    <div>
+    <!-- <div>
       <label for="mobile" class="block font-bold mb-2">Mobile</label>
       <input 
         type="text" 
@@ -48,10 +47,10 @@
         id="mobile" 
         [(ngModel)]="createOrEditUser().mobile"
         class="w-full" />
-    </div>
+    </div> -->
 
     <!-- User Type -->
-    <div>
+    <!-- <div>
       <label for="userType" class="block font-bold mb-2">User Type</label>
       <input 
         type="text" 
@@ -59,6 +58,28 @@
         id="userType" 
         [(ngModel)]="createOrEditUser().usertype"
         class="w-full" />
+    </div> -->
+
+    <!-- Role (optional) -->
+    <!-- <div>
+      <label for="role" class="block font-bold mb-2">Role</label>
+      <input type="text" pInputText id="role" [(ngModel)]="createOrEditUser().role" class="w-full" />
+    </div> -->
+
+    <!-- Operational Sites -->
+    <div>
+      <label for="opSites" class="block font-bold mb-2">Operational Sites</label>
+      <p-multiSelect
+        [options]="sites()"
+        optionLabel="siteName"
+        display="chip"
+        [ngModel]="selectedSiteIds()"
+        (ngModelChange)="selectedSiteIds.set($event)"
+        placeholder="Select sites"
+        optionValue="autoid"
+        styleClass="w-full"
+        appendTo="body"
+      ></p-multiSelect>
     </div>
 
     <!-- Password - Only for new users -->

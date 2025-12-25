@@ -9,6 +9,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { ToolbarModule } from 'primeng/toolbar';
+import { SkeletonModule } from 'primeng/skeleton';
 
 export const CommonPrimeNgImports = [
   CommonModule,
@@ -18,6 +19,7 @@ export const CommonPrimeNgImports = [
   ButtonModule,
   TagModule,
   DialogModule,
+  SkeletonModule,
   AutoCompleteModule,
   ToolbarModule,
   InputTextModule,

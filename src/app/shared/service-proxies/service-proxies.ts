@@ -1979,6 +1979,9 @@ export class AclAdminUser implements IAclAdminUser {
     email?: string | undefined;
     mobile?: string | undefined;
     usertype?: string | undefined;
+    role?: string | undefined;
+    profileImage?: string | undefined;
+    opSites?: OpSite[] | undefined;
     aclAdminUsersSites?: AclAdminUsersSite[] | undefined;
     opBusinessDayClosedByNavigations?: OpBusinessDay[] | undefined;
     opBusinessDayStartedByNavigations?: OpBusinessDay[] | undefined;
@@ -2004,6 +2007,12 @@ export class AclAdminUser implements IAclAdminUser {
             this.email = _data["email"];
             this.mobile = _data["mobile"];
             this.usertype = _data["usertype"];
+            this.role = _data["role"];
+            this.profileImage = _data["profileImage"];
+            if (Array.isArray(_data["opSites"])) {
+                this.opSites = [] as any;
+                for (let item of _data["opSites"]) this.opSites!.push(OpSite.fromJS(item));
+            }
             if (Array.isArray(_data["aclAdminUsersSites"])) {
                 this.aclAdminUsersSites = [] as any;
                 for (let item of _data["aclAdminUsersSites"])
@@ -2049,6 +2058,12 @@ export class AclAdminUser implements IAclAdminUser {
         data["email"] = this.email;
         data["mobile"] = this.mobile;
         data["usertype"] = this.usertype;
+        data["role"] = this.role;
+        data["profileImage"] = this.profileImage;
+        if (Array.isArray(this.opSites)) {
+            data["opSites"] = [];
+            for (let item of this.opSites) data["opSites"].push(item ? item.toJSON() : undefined as any);
+        }
         if (Array.isArray(this.aclAdminUsersSites)) {
             data["aclAdminUsersSites"] = [];
             for (let item of this.aclAdminUsersSites)
