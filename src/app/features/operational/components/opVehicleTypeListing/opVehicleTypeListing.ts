@@ -7,11 +7,12 @@ import { Table, TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { ToolbarModule } from 'primeng/toolbar';
 import { CreateOrEditOpVehicleType } from '../createOrEditOpVehicleType/createOrEditOpVehicleType';
+import { LoadingSkeleton } from '@/features/shared/components/loadingSkeleton/loadingSkeleton';
 
 @Component({
   selector: 'app-op-vehicle-type-listing',
   standalone: true,
-  imports: [TableModule, ButtonModule, FormsModule, CommonModule, ToolbarModule, CreateOrEditOpVehicleType],
+  imports: [TableModule, ButtonModule, FormsModule, CommonModule, ToolbarModule, CreateOrEditOpVehicleType, LoadingSkeleton],
   providers: [MessageService, OpVehicleTypeServiceProxy],
   templateUrl: './opVehicleTypeListing.html',
   styleUrl: './opVehicleTypeListing.css',
@@ -20,6 +21,7 @@ import { CreateOrEditOpVehicleType } from '../createOrEditOpVehicleType/createOr
 export class OpVehicleTypeListing {
   items = signal<OpVehicleType[]>([]);
   dialogVisible = signal<boolean>(false);
+  loading = signal<boolean>(true);
   selected = signal<OpVehicleType | null>(null);
 
   @ViewChild('dt') dt!: Table;
@@ -31,9 +33,16 @@ export class OpVehicleTypeListing {
   }
 
   load() {
-    this.svc.getAllOpVehicleTypes().subscribe({ 
-      next: (d) => this.items.set(d), 
-      error: (e) => console.error(e) 
+    this.loading.set(true);
+    this.svc.getAllOpVehicleTypes().subscribe({
+      next: (d) => {
+        this.items.set(d);
+        this.loading.set(false);
+      },
+      error: (e) => {
+        console.error(e);
+        this.loading.set(false);
+      }
     });
   }
 

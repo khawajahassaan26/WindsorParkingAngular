@@ -14,6 +14,7 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { InputTextModule } from 'primeng/inputtext';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
+import { LoadingSkeleton } from '@/features/shared/components/loadingSkeleton/loadingSkeleton';
 
 
 @Component({
@@ -32,7 +33,8 @@ import { InputIconModule } from 'primeng/inputicon';
         InputTextModule,
         IconFieldModule,
         InputIconModule,
-        CreateOrEditAclAdminUser
+        CreateOrEditAclAdminUser,
+        LoadingSkeleton
     ],
     providers: [MessageService, ConfirmationService, ACLAdminUserDTOesServiceProxy],
     templateUrl: './aclAdminUserListing.html',

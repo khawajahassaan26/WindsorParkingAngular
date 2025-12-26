@@ -18,7 +18,7 @@
 
     <div class="mb-3">
       <label class="block font-bold mb-1">Status</label>
-      <input pInputText [(ngModel)]="editModel().status" class="w-full" />
+      <app-status-select [(status)]="editModel().status"></app-status-select>
     </div>
   </div>
 

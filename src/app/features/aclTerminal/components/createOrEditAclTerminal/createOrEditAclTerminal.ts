@@ -1,4 +1,5 @@
 import { AclTerminal, AclTerminalServiceProxy } from '@/shared/service-proxies/service-proxies';
+import { StatusSelect } from '@/features/shared/components/statusSelect/statusSelect';
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, signal } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -11,7 +12,7 @@ import { LoaderService } from '@/shared/utilities/services/loader.service';
 @Component({
   selector: 'app-create-or-edit-acl-terminal',
   standalone: true,
-  imports: [CommonModule, DialogModule, ButtonModule, FormsModule, ReactiveFormsModule, InputTextModule],
+  imports: [CommonModule, DialogModule, ButtonModule, FormsModule, ReactiveFormsModule, InputTextModule, StatusSelect],
   providers: [MessageService],
   templateUrl: './createOrEditAclTerminal.html',
   styleUrl: './createOrEditAclTerminal.css',

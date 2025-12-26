@@ -4,7 +4,10 @@
   </ng-template>
 </p-toolbar>
 
-<p-table #dt [value]="items()" [paginator]="true" [rows]="10" dataKey="autoid">
+<p-table #dt [value]="items()" [paginator]="true" [rows]="10" dataKey="autoid" [loading]="loading()">
+  <ng-template pTemplate="loading">
+   <app-loading-skeleton [rows]="5" [colspan]="6"></app-loading-skeleton> 
+  </ng-template>
   <ng-template #header>
     <tr>
       <th>Type Name</th>

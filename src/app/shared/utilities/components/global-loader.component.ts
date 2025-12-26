@@ -49,12 +49,12 @@ import { Subject, takeUntil } from 'rxjs';
     }
 
     .global-loader-container {
-      background: var(--surface-0);
-      border: 1px solid var(--surface-border);
-      border-radius: 12px;
+      // background: var(--surface-0);
+      // border: 1px solid var(--surface-border);
+      // border-radius: 12px;
       padding: 2rem;
       text-align: center;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      // box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
       min-width: 200px;
       animation: scaleIn 0.3s ease-out;
     }
@@ -66,7 +66,8 @@ import { Subject, takeUntil } from 'rxjs';
     .loader-message {
       font-size: 1rem;
       font-weight: 500;
-      color: var(--text-color);
+      // color: var(--text-color);
+      color: "#ffffff";
       margin-bottom: 0.5rem;
     }
 

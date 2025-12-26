@@ -7,11 +7,12 @@ import { Table, TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { ToolbarModule } from 'primeng/toolbar';
 import { CreateOrEditOpService } from '../createOrEditOpService/createOrEditOpService';
+import { LoadingSkeleton } from '@/features/shared/components/loadingSkeleton/loadingSkeleton';
 
 @Component({
   selector: 'app-op-service-listing',
   standalone: true,
-  imports: [TableModule, ButtonModule, FormsModule, CommonModule, ToolbarModule, CreateOrEditOpService],
+  imports: [TableModule, ButtonModule, FormsModule, CommonModule, ToolbarModule, CreateOrEditOpService,LoadingSkeleton],
   providers: [MessageService, OpServiceServiceProxy],
   templateUrl: './opServiceListing.html',
   styleUrl: './opServiceListing.css',
@@ -20,6 +21,7 @@ import { CreateOrEditOpService } from '../createOrEditOpService/createOrEditOpSe
 export class OpServiceListing {
   services = signal<OpService[]>([]);
   dialogVisible = signal<boolean>(false);
+  loading = signal<boolean>(true);
   selected = signal<OpService | null>(null);
 
   @ViewChild('dt') dt!: Table;
@@ -31,7 +33,17 @@ export class OpServiceListing {
   }
 
   load() {
-    this.svc.getAllOpServices().subscribe({ next: (d) => this.services.set(d), error: (e) => console.error(e) });
+    this.loading.set(true);
+    this.svc.getAllOpServices().subscribe({
+      next: (d) => {
+        this.services.set(d);
+        this.loading.set(false);
+      },
+      error: (e) => {
+        console.error(e);
+        this.loading.set(false);
+      }
+    });
   }
 
   openNew() {

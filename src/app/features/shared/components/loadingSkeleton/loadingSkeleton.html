@@ -1,0 +1,13 @@
+<ng-container *ngFor="let _ of [].constructor(rows)">
+  <tr>
+    <td [attr.colspan]="colspan">
+      <div class="loading-row">
+        <p-skeleton [shape]="shape" [size]="size"></p-skeleton>
+        <div class="flex-1">
+          <p-skeleton width="60%" height="1rem"></p-skeleton>
+          <p-skeleton width="40%" height="0.8rem" style="margin-top:6px"></p-skeleton>
+        </div>
+      </div>
+    </td>
+  </tr>
+</ng-container>

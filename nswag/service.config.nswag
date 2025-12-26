@@ -3,7 +3,7 @@
   "defaultVariables": null,
   "documentGenerator": {
     "fromDocument": {
-      "url": "https://localhost:44318/swagger/v1/swagger.json",
+      "url": "https://202.142.177.156/msps/swagger/v1/swagger.json",
       "output": null,
       "newLineBehavior": "Auto"
     }
@@ -39,7 +39,7 @@
       "useTransformOptionsMethod": false,
       "useTransformResultMethod": false,
       "generateDtoTypes": true,
-      "operationGenerationMode": "MultipleClientsFromFirstTagAndPathSegments",
+      "operationGenerationMode": "MultipleClientsFromFirstTagAndOperationId",
       "includedOperationIds": [],
       "excludedOperationIds": [],
       "markOptionalProperties": true,

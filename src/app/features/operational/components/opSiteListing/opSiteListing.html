@@ -4,9 +4,24 @@
   </ng-template>
 </p-toolbar>
 
-<p-table #dt [value]="sites()" [paginator]="true" [rows]="10" dataKey="autoid">
+<p-table #dt [value]="sites()" [paginator]="true" [rows]="10" dataKey="autoid" [loading]="loading()" [expandedRowKeys]="expandedRows()" (onRowExpand)="onRowExpand($event)" (onRowCollapse)="onRowCollapse($event)">
+  <ng-template pTemplate="loading">
+    <tr *ngFor="let _ of [0,1,2,3,4]">
+      <td colspan="6">
+        <div class="flex items-center gap-4 py-2">
+          <p-skeleton shape="circle" size="2rem"></p-skeleton>
+          <div class="flex-1">
+            <p-skeleton width="60%" height="1rem"></p-skeleton>
+            <p-skeleton width="40%" height="0.8rem" style="margin-top:6px"></p-skeleton>
+          </div>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+
   <ng-template #header>
     <tr>
+      <th style="width:3.5rem"></th>
       <th>Site Name</th>
       <th>City</th>
       <th>Capacity</th>
@@ -16,8 +31,11 @@
     </tr>
   </ng-template>
 
-  <ng-template #body let-item>
+  <ng-template #body let-item let-expanded="expanded">
     <tr>
+      <td>
+        <p-button type="button" pRipple (click)="toggleRow(item)" [text]="true" severity="secondary" [rounded]="true" [icon]="isRowExpanded(item) ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></p-button>
+      </td>
       <td>{{ item.siteName }}</td>
       <td>{{ item.city }}</td>
       <td>{{ item.siteParkingCapacity }}</td>
@@ -25,6 +43,35 @@
       <td>{{ item.createddate | date:'dd-MMM-yyyy' }}</td>
       <td>
         <p-button icon="pi pi-pencil" class="mr-2" (click)="edit(item)"></p-button>
+      </td>
+    </tr>
+  </ng-template>
+
+  <ng-template #expandedrow let-site>
+    <tr>
+      <td colspan="7">
+        <div class="p-4">
+          <h6 class="mb-3">Services for {{ site.siteName }}</h6>
+          <p-table [value]="site.services" dataKey="autoid" size="small">
+            <ng-template pTemplate="header">
+              <tr>
+                <th>Service Name</th>
+                <th>Created</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-s>
+              <tr>
+                <td>{{ s.serviceName }}</td>
+                <td>{{ s.createddate | date:'dd-MMM-yyyy' }}</td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="2">No services assigned.</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
       </td>
     </tr>
   </ng-template>

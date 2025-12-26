@@ -51,7 +51,22 @@
 
     <div class="mb-3">
       <label class="block font-bold mb-1">Status</label>
-      <input pInputText [(ngModel)]="model().status" class="w-full" />
+      <app-status-select [(status)]="model().status"></app-status-select>
+    </div>
+
+    <div class="mb-3">
+      <label class="block font-bold mb-1">Services</label>
+      <p-multiSelect
+        [options]="services()"
+        optionLabel="serviceName"
+        display="chip"
+        [ngModel]="selectedServiceIds()"
+        (ngModelChange)="selectedServiceIds.set($event)"
+        optionValue="autoid"
+        placeholder="Select services"
+        styleClass="w-full"
+        appendTo="body"
+      ></p-multiSelect>
     </div>
   </div>
 

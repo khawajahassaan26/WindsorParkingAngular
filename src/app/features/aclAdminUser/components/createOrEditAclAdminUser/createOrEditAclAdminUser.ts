@@ -62,8 +62,8 @@ export class CreateOrEditAclAdminUser {
       const userData = this.user;
       this.isEditMode.set(!!userData?.autoid && userData.autoid > 0);
       this.createOrEditUser.set(Object.assign(new AclAdminUser(), userData));
-      // populate selectedSiteIds from user's opSites
-      const ids = (userData.opSites || []).map(s => s.autoid!).filter(id => id != null) as number[];
+      // populate selectedSiteIds from user's aclAdminUsersSites
+      const ids = (userData.aclAdminUsersSites || []).map(s => s.autoid!).filter(id => id != null) as number[];
       this.selectedSiteIds.set(ids);
       this.submitted.set(false);
       this.confirmPassword.set('');
@@ -149,11 +149,12 @@ export class CreateOrEditAclAdminUser {
       status: 'Active'
     });
     // include role/profileImage/opSites if present
-    createDto.role = this.createOrEditUser().role;
-    createDto.profileImage = this.createOrEditUser().profileImage;
+    // createDto.role = this.createOrEditUser().role;
+    // createDto.profileImage = this.createOrEditUser().profileImage;
     // map selected site ids to minimal opSite objects for backend
-    createDto.opSites = this.selectedSiteIds().map(id => ({ autoid: id } as any));
-
+   createDto.aclAdminUsersSites = this.sites().filter(site =>
+                this.selectedSiteIds().some(s => s === site.autoid)
+            );
     this.aclAdminUserService.aCLAdminUserDTOesPOST(createDto).subscribe({
       next: (result) => {
         this.messageService.add({
@@ -191,9 +192,9 @@ export class CreateOrEditAclAdminUser {
       usertype: this.createOrEditUser().usertype,
       status: this.createOrEditUser().status
     });
-    updateDto.role = this.createOrEditUser().role;
-    updateDto.profileImage = this.createOrEditUser().profileImage;
-    updateDto.opSites = this.sites().filter(site =>
+    // updateDto.role = this.createOrEditUser().role;
+    // updateDto.profileImage = this.createOrEditUser().profileImage;
+    updateDto.aclAdminUsersSites = this.sites().filter(site =>
                 this.selectedSiteIds().some(s => s === site.autoid)
             );
     this.aclAdminUserService.aCLAdminUserDTOesPUT(userId!, updateDto).subscribe({

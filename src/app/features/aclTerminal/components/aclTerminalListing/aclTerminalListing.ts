@@ -8,11 +8,12 @@ import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { ToolbarModule } from 'primeng/toolbar';
 import { CreateOrEditAclTerminal } from '../createOrEditAclTerminal/createOrEditAclTerminal';
+import { LoadingSkeleton } from '@/features/shared/components/loadingSkeleton/loadingSkeleton';
 
 @Component({
   selector: 'app-acl-terminal-listing',
   standalone: true,
-  imports: [TableModule, ButtonModule, DialogModule, FormsModule, CommonModule, ToolbarModule, CreateOrEditAclTerminal],
+  imports: [TableModule, ButtonModule, DialogModule, FormsModule, CommonModule, ToolbarModule, CreateOrEditAclTerminal,LoadingSkeleton],
   providers: [MessageService, AclTerminalServiceProxy],
   templateUrl: './aclTerminalListing.html',
   styleUrl: './aclTerminalListing.css',
@@ -21,6 +22,7 @@ import { CreateOrEditAclTerminal } from '../createOrEditAclTerminal/createOrEdit
 export class AclTerminalListing {
   terminals = signal<AclTerminal[]>([]);
   dialogVisible = signal<boolean>(false);
+  loading = signal<boolean>(true);
   selectedTerminal = signal<AclTerminal | null>(null);
 
   @ViewChild('dt') dt!: Table;
@@ -35,9 +37,16 @@ export class AclTerminalListing {
   }
 
   load() {
+    this.loading.set(true);
     this.terminalService.getAllAclTerminals().subscribe({
-      next: (data) => this.terminals.set(data),
-      error: (err) => console.error(err)
+      next: (data) => {
+        this.terminals.set(data);
+        this.loading.set(false);
+      },
+      error: (err) => {
+        console.error(err);
+        this.loading.set(false);
+      }
     });
   }
 

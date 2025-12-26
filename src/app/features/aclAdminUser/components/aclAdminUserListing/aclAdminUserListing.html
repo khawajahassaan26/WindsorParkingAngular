@@ -9,19 +9,7 @@
     dataKey="autoid" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} users"
     [showCurrentPageReport]="true" [rowsPerPageOptions]="[10, 20, 30]" [loading]="loading()"
     [expandedRowKeys]="expandedRows()" (onRowExpand)="onRowExpand($event)" (onRowCollapse)="onRowCollapse($event)">
-    <ng-template pTemplate="loading">
-        <tr *ngFor="let _ of [0,1,2,3,4,5]">
-            <td colspan="9">
-                <div class="flex items-center gap-4 py-2">
-                    <p-skeleton shape="circle" size="2rem"></p-skeleton>
-                    <div class="flex-1">
-                        <p-skeleton width="60%" height="1rem"></p-skeleton>
-                        <p-skeleton width="40%" height="0.8rem" style="margin-top: 6px"></p-skeleton>
-                    </div>
-                </div>
-            </td>
-        </tr>
-    </ng-template>
+   <app-loading-skeleton [rows]="5" [colspan]="7"></app-loading-skeleton>
 
     <ng-template #caption>
         <div class="flex items-center justify-between">
